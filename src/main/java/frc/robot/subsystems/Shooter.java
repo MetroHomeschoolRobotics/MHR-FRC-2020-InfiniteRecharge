@@ -26,7 +26,7 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void runTheShooter(double speed){
+  public void setShooter(double speed){
     _shooterMotor.set(ControlMode.PercentOutput, speed);
   }
 }

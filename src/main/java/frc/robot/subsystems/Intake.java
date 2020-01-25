@@ -25,7 +25,7 @@ public Intake(Spark intakeMotor) {
     
   }
 
-  public void runTheIntake(double speed) {
+  public void setIntake(double speed) {
     _intakeMotor.set(speed);
   }
 }

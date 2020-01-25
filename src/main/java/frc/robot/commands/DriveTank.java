@@ -18,7 +18,7 @@ public class DriveTank extends CommandBase {
   private Joystick _driverControl;
   private Joystick _manipulatorControl;
 
-  double _threshold = 0.01;
+  double _threshold = 0.1;
   public DriveTank(DriveSystemBase tankDrive, Joystick driverControl, Joystick manipulatorControl) {
     //requires(tankDrive);
     _tankDrive = tankDrive;

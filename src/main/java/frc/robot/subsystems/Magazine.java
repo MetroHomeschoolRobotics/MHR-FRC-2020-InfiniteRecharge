@@ -26,7 +26,7 @@ public class Magazine extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void runTheMagazine(double speed){
+  public void setMagazine(double speed){
     _magazineMotor.set(ControlMode.PercentOutput, speed);
   }
 }

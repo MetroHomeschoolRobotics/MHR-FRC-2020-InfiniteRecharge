@@ -32,10 +32,6 @@ public class TankDrive extends DriveSystemBase {
 
   @Override
   public void move(double x, double y, double z){
-    /*_frontLeft.set(ControlMode.PercentOutput, (y-x));
-    _rearLeft.set(ControlMode.PercentOutput, (y-x));
-    _frontRight.set(ControlMode.PercentOutput, (-y-x));
-    _rearRight.set(ControlMode.PercentOutput, (-y-x));*/
     _frontLeft.set(-y+x);
     _rearLeft.set(-y+x);
     _frontRight.set(y+x);

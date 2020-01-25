@@ -42,11 +42,12 @@ public class OI {
     Joystick driverControl = new Joystick(0);
     Joystick manipulatorControl = new Joystick(1);
     _driveTank = new DriveTank(_tankDrive, driverControl, manipulatorControl);
-    JoystickButton intakeButton = new JoystickButton(driverControl, 1);
+    //_runIntake = new RunIntake(_intake, driverControl);
+    JoystickButton intakeButton = new JoystickButton(driverControl, 5);
     intakeButton.whileHeld(new RunIntake(_intake));
-    JoystickButton shootButton = new JoystickButton(driverControl, 2);
-    shootButton.whileHeld(new RunShooter(_shooter));
-    JoystickButton magazineButton = new JoystickButton(driverControl, 3);
+    JoystickButton shootButton = new JoystickButton(driverControl, 1);
+    shootButton.toggleWhenPressed(new RunShooter(_shooter));
+    JoystickButton magazineButton = new JoystickButton(driverControl, 2);
     magazineButton.whileHeld(new RunMagazine(_magazine));
     //make a button to run the magazine
   
