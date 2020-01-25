@@ -4,17 +4,28 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.Spark;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+//import edu.wpi.first.wpilibj.CameraServer;
+//import edu.wpi.first.cameraserver.CameraServer;
+//import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
+//import edu.wpi.first.wpilibj.DoubleSolenoid;
+//import edu.wpi.first.wpilibj.Talon;
+//import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+//import com.ctre.phoenix.motorcontrol.InvertType;
+//import com.ctre.phoenix.motorcontrol.can.*;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -23,10 +34,9 @@ import frc.robot.subsystems.ExampleSubsystem;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
   public static OI m_oi;
 
-  Command m_autonomousCommand;
+  private Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   /**
@@ -35,10 +45,17 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_oi = new OI();
-    m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
-    // chooser.addOption("My Auto", new MyAutoCommand());
-    SmartDashboard.putData("Auto mode", m_chooser);
+    //CameraServer.getInstance().startAutomaticCapture();
+    DriveSystemBase tankDrive = new TankDrive(
+      new CANSparkMax(RobotMap.LeftFrontMotor, MotorType.kBrushless), 
+      new CANSparkMax(RobotMap.RightFrontMotor, MotorType.kBrushless),
+      new CANSparkMax(RobotMap.LeftRearMotor, MotorType.kBrushless),
+      new CANSparkMax(RobotMap.RightRearMotor, MotorType.kBrushless));
+    Intake intake = new Intake(new Spark(RobotMap.IntakeMotor));
+    Shooter shooter = new Shooter(new TalonSRX(RobotMap.ShooterMotor));
+    Magazine magazine = new Magazine(new TalonSRX(RobotMap.MagazineMotor));
+    m_oi = new OI(tankDrive, intake, shooter, magazine);
+    m_oi.init();
   }
 
   /**
@@ -64,7 +81,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    Scheduler.getInstance().run();
+    CommandScheduler.getInstance().run();
+    m_oi._driveTank.cancel();
   }
 
   /**
@@ -80,8 +98,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_chooser.getSelected();
-
+    //m_autonomousCommand = m_chooser.getSelected();
+    m_autonomousCommand = m_oi.getAutonomousCommand();
+    m_oi._driveTank.cancel();
+  
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -91,7 +111,7 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.start();
+      m_autonomousCommand.schedule();
     }
   }
 
@@ -100,7 +120,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    Scheduler.getInstance().run();
+    CommandScheduler.getInstance().run();
   }
 
   @Override
@@ -112,6 +132,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_oi._driveTank.schedule();
   }
 
   /**
@@ -119,7 +140,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    Scheduler.getInstance().run();
+    CommandScheduler.getInstance().run();
   }
 
   /**
