@@ -18,7 +18,7 @@ public class DriveTank extends CommandBase {
   private Joystick _driverControl;
   private Joystick _manipulatorControl;
 
-  double _threshold = 0.1;
+  double _threshold = 0.2;
   public DriveTank(DriveSystemBase tankDrive, Joystick driverControl, Joystick manipulatorControl) {
     //requires(tankDrive);
     _tankDrive = tankDrive;
@@ -53,12 +53,12 @@ public class DriveTank extends CommandBase {
       double y = _driverControl.getRawAxis(1);
       if (Math.abs(x) < _threshold){
         x = 0;
-      } else if (Math.abs(x) < _threshold * 7){
+      } else if (Math.abs(x) < _threshold * 2){
         x /= 2;
       }
       if (Math.abs(y) < _threshold){
         y = 0;
-      } else if (Math.abs(y) < _threshold * 7){
+      } else if (Math.abs(y) < _threshold * 2){
         y /= 2;
       }
       _tankDrive.move(
@@ -67,16 +67,16 @@ public class DriveTank extends CommandBase {
           _driverControl.getRawAxis(2) - _driverControl.getRawAxis(3));
     } else {
       _tankDrive.move(
-          _driverControl.getRawAxis(0)/2,
-          _driverControl.getRawAxis(1)/2,
+          _driverControl.getRawAxis(0)/(1.5),
+          _driverControl.getRawAxis(1)/(1.5),
           _driverControl.getRawAxis(2) - _driverControl.getRawAxis(3));
     }
-    if (_driverControl.getRawButton(6)) {
-      _tankDrive.move(
-          _driverControl.getRawAxis(0),
-          _driverControl.getRawAxis(1),
-          _driverControl.getRawAxis(2) - _driverControl.getRawAxis(3));
-    }
+    // if (_driverControl.getRawButton(6)) {
+    //   _tankDrive.move(
+    //       _driverControl.getRawAxis(0),
+    //       _driverControl.getRawAxis(1),
+    //       _driverControl.getRawAxis(2) - _driverControl.getRawAxis(3));
+    // }
     /*else if (_driverControl.getRawButton(5)) {
       _driveSystem.move(
           _driverControl.getRawAxis(0)/4,

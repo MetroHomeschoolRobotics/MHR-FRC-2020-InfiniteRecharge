@@ -11,14 +11,14 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
-public class RunIntake extends CommandBase {
+public class ReverseIntake extends CommandBase {
   private final Intake _intake;
   private final Joystick _driverControl;
   
   /**
    * Creates a new RunIntake.
    */
-  public RunIntake(Intake intake, Joystick driverControl) {
+  public ReverseIntake(Intake intake, Joystick driverControl) {
     // Use addRequirements() here to declare subsystem dependencies.
     _intake = intake;
     _driverControl = driverControl;
@@ -39,7 +39,7 @@ public class RunIntake extends CommandBase {
       rate = 0;
     }
     _intake.setIntake(rate);*/
-    _intake.setIntake(0.8);
+    _intake.setIntake(-0.8);
   }
 
   // Called once the command ends or is interrupted.

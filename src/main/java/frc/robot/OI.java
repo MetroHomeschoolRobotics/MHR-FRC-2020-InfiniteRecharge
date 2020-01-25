@@ -30,6 +30,8 @@ public class OI {
   CommandBase _runIntake;
   CommandBase _runShooter;
   CommandBase _runMagazine;
+  CommandBase _reverseMagazine;
+  CommandBase _reverseIntake;
   SendableChooser<CommandBase> _autoChooser = new SendableChooser<>();
   public OI(DriveSystemBase tankDrive, Intake intake, Shooter shooter, Magazine magazine){
     _tankDrive = tankDrive;
@@ -43,13 +45,17 @@ public class OI {
     Joystick manipulatorControl = new Joystick(1);
     _driveTank = new DriveTank(_tankDrive, driverControl, manipulatorControl);
     //_runIntake = new RunIntake(_intake, driverControl);
+   // _shooterAxis = new Joystick(driverControl, 3);
     JoystickButton intakeButton = new JoystickButton(driverControl, 5);
-    intakeButton.whileHeld(new RunIntake(_intake));
+    intakeButton.whileHeld(new RunIntake(_intake, driverControl));
     JoystickButton shootButton = new JoystickButton(driverControl, 1);
     shootButton.toggleWhenPressed(new RunShooter(_shooter));
     JoystickButton magazineButton = new JoystickButton(driverControl, 2);
     magazineButton.whileHeld(new RunMagazine(_magazine));
-    //make a button to run the magazine
+    JoystickButton reverseMagazineButton = new JoystickButton(driverControl, 4);
+    reverseMagazineButton.whileHeld(new ReverseMagazine(_magazine));
+    JoystickButton reverseIntakeButton = new JoystickButton(driverControl, 6);
+    reverseIntakeButton.whileHeld(new ReverseIntake(_intake, driverControl));
   
   SmartDashboard.putData("AutoMode", _autoChooser);
 }

@@ -83,6 +83,7 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     CommandScheduler.getInstance().run();
     m_oi._driveTank.cancel();
+   // m_oi._runIntake.cancel();
   }
 
   /**
@@ -101,6 +102,7 @@ public class Robot extends TimedRobot {
     //m_autonomousCommand = m_chooser.getSelected();
     m_autonomousCommand = m_oi.getAutonomousCommand();
     m_oi._driveTank.cancel();
+   // m_oi._runIntake.cancel();
   
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -132,7 +134,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    //instantiate drive command
     m_oi._driveTank.schedule();
+    //m_oi._runIntake.schedule();
   }
 
   /**
