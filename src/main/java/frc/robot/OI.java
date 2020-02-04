@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
@@ -20,10 +20,10 @@ import frc.robot.pixy2.Pixy2;
 public class OI {
   Pixy2 _i2cPixy2 = null;
   Pixy2 _spiPixy2 = null;
-  Command _autonomousCommand;
-  SendableChooser<Command> _autoChooser = new SendableChooser<>();
-  SendableChooser<Command> _i2cPixyChooser = new SendableChooser<>();
-  SendableChooser<Command> _spiPixyChooser = new SendableChooser<>();
+  CommandBase _autonomousCommand;
+  SendableChooser<CommandBase> _autoChooser = new SendableChooser<>();
+  SendableChooser<CommandBase> _i2cPixyChooser = new SendableChooser<>();
+  SendableChooser<CommandBase> _spiPixyChooser = new SendableChooser<>();
 
 
 
@@ -63,7 +63,7 @@ public class OI {
     SmartDashboard.putData("Auto mode", _autoChooser);
   }
 
-  public Command getAutonmousCommand(){
+  public CommandBase getAutonmousCommand(){
     return _autoChooser.getSelected();
   }
 

@@ -8,8 +8,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.pixy2.Pixy2;
@@ -25,7 +25,7 @@ import frc.robot.pixy2.links.*;
 public class Robot extends TimedRobot {
   public static OI m_oi;
 
-  Command m_autonomousCommand;
+  CommandBase m_autonomousCommand;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -78,7 +78,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    Scheduler.getInstance().run();
+    CommandScheduler.getInstance().run();
   }
 
   /**
@@ -94,7 +94,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_oi.getAutonmousCommand();
+   // m_autonomousCommand = m_oi.getAutonomousCommand();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -105,7 +105,7 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.start();
+      m_autonomousCommand.schedule();
     }
   }
 
@@ -114,7 +114,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    Scheduler.getInstance().run();
+    CommandScheduler.getInstance().run();
   }
 
   @Override
@@ -133,7 +133,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    Scheduler.getInstance().run();
+    CommandScheduler.getInstance().run();
   }
 
   /**

@@ -9,13 +9,13 @@ package frc.robot.commands;
 
 import java.util.ArrayList;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.pixy2.Pixy2;
 import frc.robot.pixy2.Pixy2CCC;
 import frc.robot.pixy2.Pixy2CCC.Block;
 
-public class SendGetBiggestBlock extends Command {
+public class SendGetBiggestBlock extends CommandBase {
   private Pixy2 _pixy2;
 
   public SendGetBiggestBlock(Pixy2 pixy2) {
@@ -26,12 +26,12 @@ public class SendGetBiggestBlock extends Command {
 
   // Called just before this Command runs the first time
   @Override
-  protected void initialize() {
+  public void initialize() {
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
-  protected void execute() {
+  public void execute() {
     
     System.out.println("checking for biggest block");
     SmartDashboard.putString("Biggest Block", "checking");
@@ -46,19 +46,13 @@ public class SendGetBiggestBlock extends Command {
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
-  protected boolean isFinished() {
+  public boolean isFinished() {
     return true;
   }
 
   // Called once after isFinished returns true
   @Override
-  protected void end() {
-  }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
+  public void end(boolean interrupted) {
   }
 
   
