@@ -17,7 +17,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 //import edu.wpi.first.cameraserver.CameraServer;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.*;
+//import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 //import edu.wpi.first.wpilibj.DoubleSolenoid;
 //import edu.wpi.first.wpilibj.Talon;
@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
       new CANSparkMax(RobotMap.LeftRearMotor, MotorType.kBrushless),
       new CANSparkMax(RobotMap.RightRearMotor, MotorType.kBrushless));
     Intake intake = new Intake(new Spark(RobotMap.IntakeMotor));
-    Shooter shooter = new Shooter(new TalonSRX(RobotMap.ShooterMotor));
+    Shooter shooter = new Shooter(new CANSparkMax(RobotMap.ShooterMotor1, MotorType.kBrushless), new CANSparkMax(RobotMap.ShooterMotor2, MotorType.kBrushless));
     Magazine magazine = new Magazine(new TalonSRX(RobotMap.MagazineMotor));
     m_oi = new OI(tankDrive, intake, shooter, magazine);
     m_oi.init();
