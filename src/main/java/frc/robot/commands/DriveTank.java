@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import frc.robot.subsystems.TankDrive;
 
 
@@ -34,43 +35,47 @@ public class DriveTank extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    if (/*_driverControl->GetRawButton(2)*//*true*/false) {
+    double x = _driverControl.getRawAxis(0);
+    double y = _driverControl.getRawAxis(1);
+    SmartDashboard.putNumber("Joystick X", x);
+    SmartDashboard.putNumber("Joystick Y", y);
+    if (Math.abs(x) < _threshold){
+      x = 0;
+    } else if (Math.abs(x) < _threshold * 2){
+      x /= 2;
+    }
+    if (Math.abs(y) < _threshold){
+      y = 0;
+    } else if (Math.abs(y) < _threshold * 2){
+      y /= 2;
+    }
+    SmartDashboard.putNumber("Adjusted X", x);
+    SmartDashboard.putNumber("Adjusted Y", y);
+    //if (/*_driverControl->GetRawButton(2)*//*true*/false) {
       //mainDrive().move(
       //mainDrive().driveVisionX(),
       //mainDrive().driveVisionY(),
-        _tankDrive.move(
-        0,//_driveSystem().driveVisionX(),
-        0,//driveSystem().driveVisionY(),
-        0
-      );
-    } else {
+        //_tankDrive.move(
+        //0,//_driveSystem().driveVisionX(),
+        //0,//driveSystem().driveVisionY(),
+        //0
+      //);
+    //} else {
     double total = Math.abs(_driverControl.getRawAxis(0)) +
       Math.abs(_driverControl.getRawAxis(1)) +
       Math.abs(_driverControl.getRawAxis(2)) +
-      Math.abs(_driverControl.getRawAxis(3));
-    if (total > _threshold*2) {
-      double x = _driverControl.getRawAxis(0);
-      double y = _driverControl.getRawAxis(1);
-      if (Math.abs(x) < _threshold){
-        x = 0;
-      } else if (Math.abs(x) < _threshold * 2){
-        x /= 2;
-      }
-      if (Math.abs(y) < _threshold){
-        y = 0;
-      } else if (Math.abs(y) < _threshold * 2){
-        y /= 2;
-      }
+      Math.abs(_driverControl.getRawAxis(3)); 
+    /*if (total > _threshold*2) {
       _tankDrive.move(
           x/2,
           y/2,
-          _driverControl.getRawAxis(2) - _driverControl.getRawAxis(3));
-    } else {
+          0);//_driverControl.getRawAxis(2) - _driverControl.getRawAxis(3));
+    } else {*/
       _tankDrive.move(
-          _driverControl.getRawAxis(0)/(1.5),
-          _driverControl.getRawAxis(1)/(1.5),
-          _driverControl.getRawAxis(2) - _driverControl.getRawAxis(3));
-    }
+          x/(1.5),//was driver control axis
+          y/(1.5),
+          0);//_driverControl.getRawAxis(2) - _driverControl.getRawAxis(3));
+    //}
     // if (_driverControl.getRawButton(6)) {
     //   _tankDrive.move(
     //       _driverControl.getRawAxis(0),
@@ -82,7 +87,7 @@ public class DriveTank extends CommandBase {
           _driverControl.getRawAxis(0)/4,
           _driverControl.getRawAxis(1)/4,
           _driverControl.getRawAxis(2) - _driverControl.getRawAxis(3));
-    }*/  }
+    }*/  //}
   }
 
   // Make this return true when this Command no longer needs to run execute()
