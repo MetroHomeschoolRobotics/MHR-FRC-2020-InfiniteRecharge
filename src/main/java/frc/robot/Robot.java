@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Spark;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -17,7 +18,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 //import edu.wpi.first.cameraserver.CameraServer;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.*;
+//import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 //import edu.wpi.first.wpilibj.DoubleSolenoid;
 //import edu.wpi.first.wpilibj.Talon;
@@ -38,7 +39,7 @@ public class Robot extends TimedRobot {
 
   private Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-
+  String gameData;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -145,6 +146,38 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
+
+
+gameData = DriverStation.getInstance().getGameSpecificMessage();
+if(gameData.length() > 0)
+{
+  switch (gameData.charAt(0))
+  {
+    case 'B' :
+      //Blue case code
+//      System.out.println("Game Data BLUE");
+      break;
+    case 'G' :
+      //Green case code
+//      System.out.println("Game Data GREEN");
+      break;
+    case 'R' :
+      //Red case code
+//      System.out.println("Game Data RED");
+      break;
+    case 'Y' :
+      //Yellow case code
+//      System.out.println("Game Data YELLOW");
+      break;
+    default :
+      //This is corrupt data
+//      System.out.println("Game Data BLANK");
+      break;
+  }
+} else {
+  //Code for no data received yet
+//  System.out.println("Game data NULL");
+}
   }
 
   /**
