@@ -41,14 +41,14 @@ public class DriveTank extends CommandBase {
     SmartDashboard.putNumber("Joystick Y", y);
     if (Math.abs(x) < _threshold){
       x = 0;
-    } else if (Math.abs(x) < _threshold * 2){
+    } /*else if (Math.abs(x) < _threshold * 2){
       x /= 2;
-    }
+    }*/
     if (Math.abs(y) < _threshold){
       y = 0;
-    } else if (Math.abs(y) < _threshold * 2){
+    } /*else if (Math.abs(y) < _threshold * 2){
       y /= 2;
-    }
+    }*/
     SmartDashboard.putNumber("Adjusted X", x);
     SmartDashboard.putNumber("Adjusted Y", y);
     //if (/*_driverControl->GetRawButton(2)*//*true*/false) {
@@ -61,6 +61,16 @@ public class DriveTank extends CommandBase {
         //0
       //);
     //} else {
+      if (x<0) {
+        x=-(x*x);
+      } else if (x >=0) {
+        x = (x*x);
+      }
+      if (y<0) {
+        y = -(y*y);
+      } else if (y >= 0) {
+        y = (y*y);
+      }
     double total = Math.abs(_driverControl.getRawAxis(0)) +
       Math.abs(_driverControl.getRawAxis(1)) +
       Math.abs(_driverControl.getRawAxis(2)) +
@@ -72,9 +82,12 @@ public class DriveTank extends CommandBase {
           0);//_driverControl.getRawAxis(2) - _driverControl.getRawAxis(3));
     } else {*/
       _tankDrive.move(
-          x/(1.5),//was driver control axis
-          y/(1.5),
-          0);//_driverControl.getRawAxis(2) - _driverControl.getRawAxis(3));
+          //x/(1.5),//was driver control axis
+          //y/(1.5),
+          x,
+          y,
+          0);
+    //_driverControl.getRawAxis(2) - _driverControl.getRawAxis(3));
     //}
     // if (_driverControl.getRawButton(6)) {
     //   _tankDrive.move(

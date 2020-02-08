@@ -29,7 +29,7 @@ public class RunShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _shooter.setShooter(0.8);
+    _shooter.setShooter(0.8);//was 1
   }
 
   // Called once the command ends or is interrupted.
