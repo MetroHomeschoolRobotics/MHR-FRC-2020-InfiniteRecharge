@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
       new CANSparkMax(RobotMap.LeftRearMotor, MotorType.kBrushless),
       new CANSparkMax(RobotMap.RightRearMotor, MotorType.kBrushless));
     Intake intake = new Intake(new Spark(RobotMap.IntakeMotor));
-    Shooter shooter = new Shooter(new TalonSRX(RobotMap.ShooterMotor));
+    Shooter shooter = new Shooter(new CANSparkMax(RobotMap.ShooterMotor1, MotorType.kBrushless), new CANSparkMax(RobotMap.ShooterMotor2, MotorType.kBrushless));
     Magazine magazine = new Magazine(new TalonSRX(RobotMap.MagazineMotor));
     m_oi = new OI(tankDrive, intake, shooter, magazine);
     m_oi.init();

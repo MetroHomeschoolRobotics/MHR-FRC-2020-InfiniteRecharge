@@ -9,16 +9,19 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.ControlMode;
+//import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+//import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class Shooter extends SubsystemBase {
-  public TalonSRX _shooterMotor;
+  public CANSparkMax _shooterMotor1;
+  public CANSparkMax _shooterMotor2;
   /**
    * Creates a new Shooter.
    */
-  public Shooter(TalonSRX shooterMotor) {
-    _shooterMotor = shooterMotor;
+  public Shooter(CANSparkMax shooterMotor1, CANSparkMax shooterMotor2) {
+    _shooterMotor1 = shooterMotor1;
+    _shooterMotor2 = shooterMotor2;
   }
 
   @Override
@@ -27,6 +30,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooter(double speed){
-    _shooterMotor.set(ControlMode.PercentOutput, speed);
+    _shooterMotor1.set(-speed);
+    _shooterMotor2.set(speed);
   }
 }
