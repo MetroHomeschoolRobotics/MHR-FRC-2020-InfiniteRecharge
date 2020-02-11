@@ -17,6 +17,11 @@ import frc.robot.pixy2.Pixy2CCC.Block;
 
 public class FindColorBlocks extends CommandBase {
   private Pixy2 _pixy2;
+  int transitionCounter=0;
+  int currentColor=2;
+  int previousColor=2;
+  int halfRev=0;
+
   public FindColorBlocks(Pixy2 pixy2) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -35,19 +40,34 @@ public class FindColorBlocks extends CommandBase {
    if (biggestBlock != null){ 
      //System.out.println(biggestBlock.getSignature());
     if ((biggestBlock.getSignature() /*& Pixy2CCC.CCC_SIG1*/) == 1 /*Pixy2CCC.CCC_SIG1*/){
-      System.out.println("Found YELLOW");
+    //  System.out.println("Found YELLOW");
     }
     if ((biggestBlock.getSignature() /*& Pixy2CCC.CCC_SIG2*/) == 2 /*Pixy2CCC.CCC_SIG2*/){
-      System.out.println("Found RED");
+    //  System.out.println("Found RED");
     }
     if ((biggestBlock.getSignature() /*& Pixy2CCC.CCC_SIG3*/) == 3 /*Pixy2CCC.CCC_SIG3*/){
-      System.out.println("Found GREEN");
+    //  System.out.println("Found GREEN");
     }
     if ((biggestBlock.getSignature() /*& Pixy2CCC.CCC_SIG4*/) == 5 /*Pixy2CCC.CCC_SIG5*/){
-      System.out.println("Found BLUE");
+    //  System.out.println("Found BLUE");
+    }
+  
+
+  currentColor = biggestBlock.getSignature();
+    if (currentColor == previousColor){}
+      else {
+      transitionCounter++;
+      previousColor = currentColor;
+    if (currentColor == 2){
+      halfRev++;
+      System.out.println(halfRev);
+    }
+    if (halfRev == 4){
+      System.out.println("Stop");
+    }
     }
   }
-  }
+    }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
