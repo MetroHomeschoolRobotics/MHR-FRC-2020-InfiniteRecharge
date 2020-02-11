@@ -32,12 +32,13 @@ public class ExecuteChooser extends CommandBase {
   }
 
   // Make this return true when this Command no longer needs to run execute()
-  //@Override
-  //public boolean isFinished() {
-    //CommandBase cmd = (CommandBase)_chooser.getSelected();
-    //cmd.schedule();
+  @Override
+  public boolean isFinished() {
+    CommandBase cmd = (CommandBase)_chooser.getSelected();
+    cmd.schedule();
     //return !cmd.isRunning();
-//  }
+    return cmd.isFinished();
+  }
 
   // Called once after isFinished returns true
   @Override

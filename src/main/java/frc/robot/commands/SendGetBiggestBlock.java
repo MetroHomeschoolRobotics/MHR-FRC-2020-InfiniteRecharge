@@ -54,7 +54,7 @@ public class SendGetBiggestBlock extends CommandBase {
   @Override
   public void end(boolean interrupted) {
   }
-  
+
 	private Block getBiggestBlock() {
 		// Gets the number of "blocks", identified targets, that match signature 1 on the Pixy2,
 		// does not wait for new data if none is available,

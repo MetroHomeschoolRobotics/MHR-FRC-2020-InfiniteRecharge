@@ -59,9 +59,6 @@ public class FindColorBlocks extends CommandBase {
   @Override
   public void end(boolean interrupted) {
   }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
 private Block getBiggestBlock(int signature) {
   // Gets the number of "blocks", identified targets, that match signature 1 on the Pixy2,
   // does not wait for new data if none is available,
