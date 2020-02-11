@@ -9,12 +9,12 @@ package frc.robot.commands;
 
 import javax.swing.text.StyleContext.SmallAttributeSet;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.pixy2.Pixy2;
 import frc.robot.pixy2.Pixy2.Version;
 
-public class SendCheckVersion extends Command {
+public class SendCheckVersion extends CommandBase {
   private Pixy2 _pixy2;
 
   public SendCheckVersion(Pixy2 pixy2) {
@@ -23,12 +23,12 @@ public class SendCheckVersion extends Command {
 
   // Called just before this Command runs the first time
   @Override
-  protected void initialize() {
+  public void initialize() {
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
-  protected void execute() {
+  public void execute() {
     SmartDashboard.putString("Pixy Version", "checking");
     Version version = _pixy2.getVersionInfo();
     if (version != null){
@@ -40,18 +40,12 @@ public class SendCheckVersion extends Command {
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
-  protected boolean isFinished() {
+  public boolean isFinished() {
     return true;
   }
 
   // Called once after isFinished returns true
   @Override
-  protected void end() {
-  }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
+  public void end(boolean interrupted) {
   }
 }

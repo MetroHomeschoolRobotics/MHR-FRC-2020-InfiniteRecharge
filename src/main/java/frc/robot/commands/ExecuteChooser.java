@@ -7,13 +7,13 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
-public class ExecuteChooser extends Command {
-  private SendableChooser<Command> _chooser;
+public class ExecuteChooser extends CommandBase {
+  private SendableChooser<CommandBase> _chooser;
 
-  public ExecuteChooser(SendableChooser<Command> chooser) {
+  public ExecuteChooser(SendableChooser<CommandBase> chooser) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     _chooser = chooser;
@@ -21,32 +21,26 @@ public class ExecuteChooser extends Command {
 
   // Called just before this Command runs the first time
   @Override
-  protected void initialize() {
+  public void initialize() {
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
-  protected void execute() {
-    Command cmd = (Command)_chooser.getSelected();
-    cmd.start();
+  public void execute() {
+    CommandBase cmd = (CommandBase)_chooser.getSelected();
+    cmd.schedule();
   }
 
   // Make this return true when this Command no longer needs to run execute()
-  @Override
-  protected boolean isFinished() {
-    Command cmd = (Command)_chooser.getSelected();
-    cmd.start();
-    return !cmd.isRunning();
-  }
+  //@Override
+  //public boolean isFinished() {
+    //CommandBase cmd = (CommandBase)_chooser.getSelected();
+    //cmd.schedule();
+    //return !cmd.isRunning();
+//  }
 
   // Called once after isFinished returns true
   @Override
-  protected void end() {
-  }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
+  public void end(boolean interrupted) {
   }
 }
