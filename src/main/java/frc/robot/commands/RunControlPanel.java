@@ -13,7 +13,7 @@ import frc.robot.subsystems.ControlPanel;
 public class RunControlPanel extends CommandBase {
   private final ControlPanel _controlPanel;
   /**
-   * Creates a new RunShooter.
+   * Creates a new RunControlPanel.
    */
   public RunControlPanel(ControlPanel controlPanel) {
     // Use addRequirements() here to declare subsystem dependencies.

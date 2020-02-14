@@ -2,24 +2,38 @@ package frc.robot.commands;
 
 import java.util.*;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.*;
+import frc.robot.commands.*;
+
+
+
+
 public class controlPanelTest {
 
-    static int halfRevCounter;
-    static int transitionCounter;
-    static int currentColor = 0;
-    static int lastColor = 0;
-    static int controlPanelDeployDirection=0;
-    static int taskToDo = 0;
-    static int deployCommand; //test bit to simulate signal from controller
-    static int taskCompleted = 0;
-    static int myCommand;
-    static Scanner console = new Scanner(System.in);
-    static int allDone = 0;
-    static int firstColor = 1;
-    static int myTargetColor = 1;
-    static int modifiedTargetColor=3;
+ int halfRevCounter;
+    int transitionCounter;
+    int currentColor = 0;
+    int lastColor = 0;
+    int controlPanelDeployDirection=0;
+    int taskToDo = 0;
+    int deployCommand; //test bit to simulate signal from controller
+    int taskCompleted = 0;
+    int myCommand;
+    Scanner console = new Scanner(System.in);
+    int allDone = 0;
+    int firstColor = 1;
+    int myTargetColor = 1;
+    int modifiedTargetColor=3;
 
-    public static int deployControlPanelControl(int direction) {
+    public ControlPanel _controlPanel;
+
+
+
+    public int deployControlPanelControl(int direction) {
         // drive the control panel control wheel into position
         if (direction == 1) {
             // move the control controller into position
@@ -34,7 +48,7 @@ public class controlPanelTest {
         return 1;
     }
 
-    public static void initiatePixy() {
+    public void initiatePixy() {
         // simulate the pixy getting the current color
        // myBlock = (int) (4 * (Math.random())) + 1;
         firstColor = getBlock();
@@ -45,19 +59,20 @@ public class controlPanelTest {
         myTargetColor = (int) (4 * (Math.random())) + 1;
     }
 
-    public static int getBlock() {
+    public int getBlock() {
         // simulate the pixy getting the current color
         int myBlock;
         myBlock = (int) (4 * (Math.random())) + 1;
         return myBlock;
     }
 
-    public static int turnThreeTimes() {
+    public int turnThreeTimes() {
         // simulate the pixy getting the current color
         System.out.println("In the method");
         int inPosition = 0;
         while (/*transitionCounter >= 1 && */halfRevCounter < 7){
             // turn the motor on
+          // RunControlPanel.execute();
             currentColor = getBlock();
             System.out.println(currentColor);
             if (currentColor != lastColor) {
@@ -77,7 +92,7 @@ public class controlPanelTest {
     }
 
 
-    public static int positionPanel() {
+    public int positionPanel() {
         // simulate the pixy getting the current color
         System.out.println("In the position method");
         int inPosition = 0;
@@ -118,7 +133,7 @@ public class controlPanelTest {
 
 
 
-    public static void runIt (int depCom) {
+    public void runIt (int depCom) {
         // deploy the control panel controller deployControlPanelControl();
 
         // choose the task to do... turns or position
