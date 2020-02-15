@@ -65,7 +65,7 @@ public class OI {
     JoystickButton intakeButton = new JoystickButton(manipulatorControl, 5);
     intakeButton.whileHeld(new RunIntake(_intake, manipulatorControl));
     JoystickButton shootButton = new JoystickButton(manipulatorControl, 1);
-    shootButton.toggleWhenPressed(new RunShooter(_shooter)); //a
+    shootButton.whileHeld(new RunShooter(_shooter)); //was toggleWhenPressed
     JoystickButton magazineButton = new JoystickButton(manipulatorControl, 2);
     magazineButton.whileHeld(new RunMagazine(_magazine));
     JoystickButton reverseMagazineButton = new JoystickButton(manipulatorControl, 4);
@@ -75,7 +75,7 @@ public class OI {
 /*    JoystickButton controlPanelButton = new JoystickButton(driverControl, 8); // on the start button
     controlPanelButton.toggleWhenPressed(new RunControlPanel(_controlPanel));*/
     JoystickButton targetButton = new JoystickButton(driverControl, 1);
-    targetButton.toggleWhenPressed(new DriveLimelight(_tankDrive));
+    targetButton.whileHeld(new DriveLimelight(_tankDrive));//was toggleWhenPressed
 
 
     _tankDrive.setDefaultCommand(_driveTank);
