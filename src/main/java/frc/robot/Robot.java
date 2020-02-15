@@ -55,7 +55,9 @@ public class Robot extends TimedRobot {
     Intake intake = new Intake(new Spark(RobotMap.IntakeMotor));
     Shooter shooter = new Shooter(new CANSparkMax(RobotMap.ShooterMotor1, MotorType.kBrushless), new CANSparkMax(RobotMap.ShooterMotor2, MotorType.kBrushless));
     Magazine magazine = new Magazine(new TalonSRX(RobotMap.MagazineMotor));
-    m_oi = new OI(tankDrive, intake, shooter, magazine);
+    ControlPanel controlPanel = new ControlPanel(new Spark(RobotMap.ControlPanelMotor));
+   
+    m_oi = new OI(tankDrive, intake, shooter, magazine, controlPanel);
     m_oi.init();
   }
 
@@ -121,10 +123,10 @@ public class Robot extends TimedRobot {
   /**
    * This function is called periodically during autonomous.
    */
-  @Override
+  /*@Override
   public void autonomousPeriodic() {
     CommandScheduler.getInstance().run();
-  }
+  }*/
 
   @Override
   public void teleopInit() {
