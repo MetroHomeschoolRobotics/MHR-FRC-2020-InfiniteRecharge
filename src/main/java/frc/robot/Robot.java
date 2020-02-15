@@ -37,6 +37,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class Robot extends TimedRobot {
   public static OI m_oi;
 
+  private Command _driveLimelight;
+  private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   String gameData;
@@ -71,6 +73,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    CommandScheduler.getInstance().run();
   }
 
   /**
@@ -123,10 +126,10 @@ public class Robot extends TimedRobot {
   /**
    * This function is called periodically during autonomous.
    */
-  /*@Override
+  @Override
   public void autonomousPeriodic() {
     CommandScheduler.getInstance().run();
-  }*/
+  }
 
   @Override
   public void teleopInit() {

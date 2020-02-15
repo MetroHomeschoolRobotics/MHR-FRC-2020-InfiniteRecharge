@@ -22,6 +22,7 @@ public class DriveTank extends CommandBase {
   double _threshold = 0.2;
   public DriveTank(DriveSystemBase tankDrive, Joystick driverControl, Joystick manipulatorControl) {
     //requires(tankDrive);
+    addRequirements(tankDrive);
     _tankDrive = tankDrive;
     _driverControl = driverControl;
     _manipulatorControl = manipulatorControl;
@@ -51,7 +52,7 @@ public class DriveTank extends CommandBase {
     }*/
     SmartDashboard.putNumber("Adjusted X", x);
     SmartDashboard.putNumber("Adjusted Y", y);
-    //if (/*_driverControl->GetRawButton(2)*//*true*/false) {
+    //if (_driverControl->GetRawButton(2)*//*true*/false) {
       //mainDrive().move(
       //mainDrive().driveVisionX(),
       //mainDrive().driveVisionY(),
@@ -71,6 +72,13 @@ public class DriveTank extends CommandBase {
       } else if (y >= 0) {
         y = (y*y);
       }
+      if (_driverControl.getRawButton(5)) {
+        x = x/2;
+        y = y/2;
+      }else if (_driverControl.getRawButton(6)) {
+        x = 2*x;
+        y = 2*y;
+      }
     double total = Math.abs(_driverControl.getRawAxis(0)) +
       Math.abs(_driverControl.getRawAxis(1)) +
       Math.abs(_driverControl.getRawAxis(2)) +
@@ -84,8 +92,8 @@ public class DriveTank extends CommandBase {
       _tankDrive.move(
           //x/(1.5),//was driver control axis
           //y/(1.5),
-          x,
-          y,
+          x/2,
+          y/2,
           0);
     //_driverControl.getRawAxis(2) - _driverControl.getRawAxis(3));
     //}

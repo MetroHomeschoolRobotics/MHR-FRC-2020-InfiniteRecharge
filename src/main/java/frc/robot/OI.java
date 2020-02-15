@@ -25,7 +25,7 @@ public class OI {
   private Intake _intake;
   private Shooter _shooter;
   private Magazine _magazine;
-  private ControlPanel _controlPanel;
+//  private ControlPanel _controlPanel;
   CommandBase _autonomousCommand;
   CommandBase _driveTank;
   CommandBase _runIntake;
@@ -34,13 +34,14 @@ public class OI {
   CommandBase _runControlPanel;
   CommandBase _reverseMagazine;
   CommandBase _reverseIntake;
+  CommandBase _driveLimelight;
   SendableChooser<CommandBase> _autoChooser = new SendableChooser<>();
   public OI(DriveSystemBase tankDrive, Intake intake, Shooter shooter, Magazine magazine, ControlPanel controlPanel){
     _tankDrive = tankDrive;
     _intake = intake;
     _shooter = shooter;
     _magazine = magazine;
-    _controlPanel = controlPanel;
+    //_controlPanel = controlPanel;
   }
   
   public void init() {
@@ -49,21 +50,23 @@ public class OI {
     _driveTank = new DriveTank(_tankDrive, driverControl, manipulatorControl);
     //_runIntake = new RunIntake(_intake, driverControl);
    // _shooterAxis = new Joystick(driverControl, 3);
-    JoystickButton intakeButton = new JoystickButton(driverControl, 5);
-    intakeButton.whileHeld(new RunIntake(_intake, driverControl));
-    JoystickButton shootButton = new JoystickButton(driverControl, 1);
+    JoystickButton intakeButton = new JoystickButton(manipulatorControl, 5);
+    intakeButton.whileHeld(new RunIntake(_intake, manipulatorControl));
+    JoystickButton shootButton = new JoystickButton(manipulatorControl, 1);
     shootButton.toggleWhenPressed(new RunShooter(_shooter)); //a
-    JoystickButton magazineButton = new JoystickButton(driverControl, 2);
+    JoystickButton magazineButton = new JoystickButton(manipulatorControl, 2);
     magazineButton.whileHeld(new RunMagazine(_magazine));
-    JoystickButton reverseMagazineButton = new JoystickButton(driverControl, 4);
+    JoystickButton reverseMagazineButton = new JoystickButton(manipulatorControl, 4);
     reverseMagazineButton.whileHeld(new ReverseMagazine(_magazine));
-    JoystickButton reverseIntakeButton = new JoystickButton(driverControl, 6);
-    reverseIntakeButton.whileHeld(new ReverseIntake(_intake, driverControl));
-    JoystickButton controlPanelButton = new JoystickButton(driverControl, 8); // on the start button
-    controlPanelButton.toggleWhenPressed(new RunControlPanel(_controlPanel));
-   
+    JoystickButton reverseIntakeButton = new JoystickButton(manipulatorControl, 6);
+    reverseIntakeButton.whileHeld(new ReverseIntake(_intake, manipulatorControl));
+/*    JoystickButton controlPanelButton = new JoystickButton(driverControl, 8); // on the start button
+    controlPanelButton.toggleWhenPressed(new RunControlPanel(_controlPanel));*/
+    JoystickButton targetButton = new JoystickButton(driverControl, 1);
+    targetButton.toggleWhenPressed(new DriveLimelight(_tankDrive));
 
 
+    _tankDrive.setDefaultCommand(_driveTank);
   SmartDashboard.putData("AutoMode", _autoChooser);
 }
   

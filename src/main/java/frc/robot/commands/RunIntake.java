@@ -13,15 +13,15 @@ import frc.robot.subsystems.Intake;
 
 public class RunIntake extends CommandBase {
   private final Intake _intake;
-  private final Joystick _driverControl;
+  private final Joystick _manipulatorControl;
   
   /**
    * Creates a new RunIntake.
    */
-  public RunIntake(Intake intake, Joystick driverControl) {
+  public RunIntake(Intake intake, Joystick manipulatorControl) {
     // Use addRequirements() here to declare subsystem dependencies.
     _intake = intake;
-    _driverControl = driverControl;
+    _manipulatorControl = manipulatorControl;
     addRequirements(intake);
   }
 
