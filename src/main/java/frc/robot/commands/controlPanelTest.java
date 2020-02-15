@@ -2,19 +2,19 @@ package frc.robot.commands;
 
 import java.util.*;
 
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+//import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj2.command.CommandBase;
+//import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.*;
-import frc.robot.commands.*;
+//import frc.robot.commands.*;
 
 
 
 
-public class controlPanelTest {
+public class ControlPanelTest {
 
- int halfRevCounter;
+    int halfRevCounter;
     int transitionCounter;
     int currentColor = 0;
     int lastColor = 0;
