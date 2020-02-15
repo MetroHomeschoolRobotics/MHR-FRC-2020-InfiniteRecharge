@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
+import frc.robot.pixy2.Pixy2;
 
 /**
  * This class is the glue that binds the controls on the physical operator

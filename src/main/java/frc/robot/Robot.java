@@ -7,12 +7,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.pixy2.Pixy2;
 import frc.robot.pixy2.links.*;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -42,7 +39,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class Robot extends TimedRobot {
   public static OI m_oi;
 
-  CommandBase m_autonomousCommand;
   private Command _driveLimelight;
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
@@ -81,7 +77,7 @@ public class Robot extends TimedRobot {
     Magazine magazine = new Magazine(new TalonSRX(RobotMap.MagazineMotor));
     ControlPanel controlPanel = new ControlPanel(new Spark(RobotMap.ControlPanelMotor));
    
-    m_oi = new OI(pixy2I2C, picsy2SPI, tankDrive, intake, shooter, magazine, controlPanel);
+    m_oi = new OI(pixy2I2C, pixy2SPI, tankDrive, intake, shooter, magazine, controlPanel);
     m_oi.init();
   }
 
@@ -178,10 +174,9 @@ public class Robot extends TimedRobot {
    * This function is called periodically during operator control.
    */
   @Override
-  public void teleopPeriodic() {
-  
+  public void teleopPeriodic() {  
     CommandScheduler.getInstance().run();
-  }
+  
 
 
 gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -214,7 +209,7 @@ if(gameData.length() > 0)
   //Code for no data received yet
 //  System.out.println("Game data NULL");
 }
-  }
+}
 
   /**
    * This function is called periodically during test mode.
