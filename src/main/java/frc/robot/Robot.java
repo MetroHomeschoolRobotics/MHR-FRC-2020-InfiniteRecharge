@@ -7,9 +7,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.pixy2.Pixy2;
+import frc.robot.pixy2.links.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Spark;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -37,6 +42,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class Robot extends TimedRobot {
   public static OI m_oi;
 
+  CommandBase m_autonomousCommand;
   private Command _driveLimelight;
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
@@ -48,7 +54,23 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    //CameraServer.getInstance().startAutomaticCapture();
+    Pixy2 pixy2I2C = null;
+    Pixy2 pixy2SPI = null;
+
+    try{
+      pixy2I2C = Pixy2.createInstance(new I2CLink());
+      pixy2I2C.init();
+    } catch (Exception e){
+      System.out.println(e.getMessage());
+      pixy2I2C = null;
+    }
+    try {
+      pixy2SPI = Pixy2.createInstance(new SPILink());
+      pixy2SPI.init();
+    } catch (Exception e){
+      System.out.println(e.getMessage());
+      pixy2SPI = null;
+    }    //CameraServer.getInstance().startAutomaticCapture();
     DriveSystemBase tankDrive = new TankDrive(
       new CANSparkMax(RobotMap.LeftFrontMotor, MotorType.kBrushless), 
       new CANSparkMax(RobotMap.RightFrontMotor, MotorType.kBrushless),
@@ -59,7 +81,7 @@ public class Robot extends TimedRobot {
     Magazine magazine = new Magazine(new TalonSRX(RobotMap.MagazineMotor));
     ControlPanel controlPanel = new ControlPanel(new Spark(RobotMap.ControlPanelMotor));
    
-    m_oi = new OI(tankDrive, intake, shooter, magazine, controlPanel);
+    m_oi = new OI(pixy2I2C, picsy2SPI, tankDrive, intake, shooter, magazine, controlPanel);
     m_oi.init();
   }
 
@@ -73,7 +95,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
   }
 
   /**
@@ -103,7 +124,7 @@ public class Robot extends TimedRobot {
    * chooser code above (like the commented example) or additional comparisons
    * to the switch structure below with additional strings & commands.
    */
-  @Override
+  /*@Override
   public void autonomousInit() {
     //m_autonomousCommand = m_chooser.getSelected();
     m_autonomousCommand = m_oi.getAutonomousCommand();
@@ -117,11 +138,19 @@ public class Robot extends TimedRobot {
      * autonomousCommand = new ExampleCommand(); break; }
      */
 
+    /*
+     * String autoSelected = SmartDashboard.getString("Auto Selector",
+     * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
+     * = new MyAutoCommand(); break; case "Default Auto": default:
+     * autonomousCommand = new ExampleCommand(); break; }
+     */
+
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
+    /*if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-  }
+    
+  }*/
 
   /**
    * This function is called periodically during autonomous.
@@ -150,7 +179,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+  
     CommandScheduler.getInstance().run();
+  }
 
 
 gameData = DriverStation.getInstance().getGameSpecificMessage();

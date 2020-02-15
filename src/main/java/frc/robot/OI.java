@@ -21,6 +21,10 @@ import frc.robot.commands.*;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
+
+  Pixy2 _i2cPixy2 = null;
+  Pixy2 _spiPixy2 = null;
+
   private DriveSystemBase _tankDrive;
   private Intake _intake;
   private Shooter _shooter;
@@ -36,7 +40,14 @@ public class OI {
   CommandBase _reverseIntake;
   CommandBase _driveLimelight;
   SendableChooser<CommandBase> _autoChooser = new SendableChooser<>();
-  public OI(DriveSystemBase tankDrive, Intake intake, Shooter shooter, Magazine magazine, ControlPanel controlPanel){
+
+  SendableChooser<CommandBase> _i2cPixyChooser = new SendableChooser<>();
+  SendableChooser<CommandBase> _spiPixyChooser = new SendableChooser<>();
+
+
+  public OI(Pixy2 i2cPixy2, Pixy2 spiPixy2, DriveSystemBase tankDrive, Intake intake, Shooter shooter, Magazine magazine, ControlPanel controlPanel){
+    _i2cPixy2 = i2cPixy2;
+    _spiPixy2 = spiPixy2;
     _tankDrive = tankDrive;
     _intake = intake;
     _shooter = shooter;
@@ -67,6 +78,34 @@ public class OI {
 
 
     _tankDrive.setDefaultCommand(_driveTank);
+
+   if (_i2cPixy2 != null){
+      System.out.println("Adding Dashboard Options...");
+      _i2cPixyChooser.setDefaultOption("Check Version", new SendCheckVersion(_i2cPixy2));
+      _i2cPixyChooser.addOption("Get Biggest Block", new SendGetBiggestBlock(_i2cPixy2));
+      _i2cPixyChooser.addOption("Find Color Blocks", new FindColorBlocks(_i2cPixy2));
+      _i2cPixyChooser.addOption("Lamp Off", new SendLED(_i2cPixy2, false, 0, 0, 0));
+      _i2cPixyChooser.addOption("Lamp On (Red)", new SendLED(_i2cPixy2, true, 255, 0, 0));
+      _i2cPixyChooser.addOption("Lamp On (Green)", new SendLED(_i2cPixy2, true, 0, 255, 0));
+      _i2cPixyChooser.addOption("Lamp On (Blue)", new SendLED(_i2cPixy2, true, 0, 0, 255));
+      _i2cPixyChooser.addOption("Lamp On (Purple)", new SendLED(_i2cPixy2, true, 200, 30, 255));
+      SmartDashboard.putData("I2C Pixy Command", _i2cPixyChooser);
+      SmartDashboard.putData("Send I2C Command", new ExecuteChooser(_i2cPixyChooser));
+    }
+
+    if (_spiPixy2 != null){
+      _spiPixyChooser.setDefaultOption("Check Version", new SendCheckVersion(_spiPixy2));
+      _spiPixyChooser.addOption("Get Biggest Block", new SendGetBiggestBlock(_spiPixy2));
+      _spiPixyChooser.addOption("Find Color Blocks", new FindColorBlocks(_spiPixy2));
+      _spiPixyChooser.addOption("Lamp Off", new SendLED(_spiPixy2, false, 0, 0, 0));
+      _spiPixyChooser.addOption("Lamp On (Red)", new SendLED(_spiPixy2, true, 255, 0, 0));
+      _spiPixyChooser.addOption("Lamp On (Green)", new SendLED(_spiPixy2, true, 0, 255, 0));
+      _spiPixyChooser.addOption("Lamp On (Blue)", new SendLED(_spiPixy2, true, 0, 0, 255));
+      _spiPixyChooser.addOption("Lamp On (Purple)", new SendLED(_spiPixy2, true, 200, 30, 255));
+      SmartDashboard.putData("SPI Pixy Command", _spiPixyChooser);
+      SmartDashboard.putData("Send SPI Command", new ExecuteChooser(_spiPixyChooser));
+    }
+
   SmartDashboard.putData("AutoMode", _autoChooser);
 }
   
