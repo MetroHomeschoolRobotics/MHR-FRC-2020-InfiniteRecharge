@@ -2,6 +2,10 @@ package frc.robot.commands;
 
 import java.util.*;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.pixy2.Pixy2CCC.Block;
+import frc.robot.pixy2.Pixy2;
+import frc.robot.pixy2.Pixy2CCC;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -28,7 +32,8 @@ public class ControlPanelTest {
     int firstColor = 1;
     int myTargetColor = 1;
     int modifiedTargetColor=3;
-
+    String gameData;
+  
     public ControlPanel _controlPanel;
 
 
@@ -56,15 +61,51 @@ public class ControlPanelTest {
         lastColor = firstColor;
         halfRevCounter = 0;
         transitionCounter = 0;
-        myTargetColor = (int) (4 * (Math.random())) + 1;
-    }
+            
+        gameData = DriverStation.getInstance().getGameSpecificMessage();
+if(gameData.length() > 0)
+{
+  switch (gameData.charAt(0))
+  {
+    case 'B' :
+      myTargetColor=5;
+//      System.out.println("Game Data BLUE");
+      break;
+    case 'G' :
+      //Green case code
+      myTargetColor=3;
+      break;
+    case 'R' :
+      //Red case code
+      myTargetColor=2;
+      break;
+    case 'Y' :
+      //Yellow case code
+      myTargetColor=1;
+      break;
+    default :
+      //This is corrupt data
+//      System.out.println("Game Data BLANK");
+      break;
+  }
+} else {
+  //Code for no data received yet
+//  System.out.println("Game data NULL");
+}
+}
+    
+    
 
     public int getBlock() {
         // simulate the pixy getting the current color
-        int myBlock;
-        myBlock = (int) (4 * (Math.random())) + 1;
+        int myBlock = FindColorBlocks.currentColor; 
+
         return myBlock;
     }
+
+ 
+
+
 
     public int turnThreeTimes() {
         // simulate the pixy getting the current color
@@ -94,7 +135,7 @@ public class ControlPanelTest {
 
     public int positionPanel() {
         // simulate the pixy getting the current color
-        System.out.println("In the position method");
+     //   System.out.println("In the position method");
         int inPosition = 0;
         while (/*transitionCounter >= 1 && */inPosition != 1) {
             switch (myTargetColor){
@@ -102,12 +143,12 @@ public class ControlPanelTest {
                     modifiedTargetColor=3;
                     break;
                 case 2: 
-                    modifiedTargetColor=4;
+                    modifiedTargetColor=5;
                     break;
                 case 3: 
                     modifiedTargetColor=1;
                     break;
-                case 4: 
+                case 5: 
                     modifiedTargetColor=2;
                     break;
                 default: 
