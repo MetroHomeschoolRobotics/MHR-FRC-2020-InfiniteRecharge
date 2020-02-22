@@ -32,6 +32,7 @@ public class OI {
   private Shooter _shooter;
   private Magazine _magazine;
   private ControlPanel _controlPanel;
+  private Transition _transition;
   CommandBase _autonomousCommand;
   CommandBase _driveTank;
   CommandBase _runIntake;
@@ -41,13 +42,15 @@ public class OI {
   CommandBase _reverseMagazine;
   CommandBase _reverseIntake;
   CommandBase _driveLimelight;
+  CommandBase _runTransition;
+  CommandBase _transitionTeleop;
   SendableChooser<CommandBase> _autoChooser = new SendableChooser<>();
 
   SendableChooser<CommandBase> _i2cPixyChooser = new SendableChooser<>();
   SendableChooser<CommandBase> _spiPixyChooser = new SendableChooser<>();
 
 
-  public OI(Pixy2 i2cPixy2, Pixy2 spiPixy2, DriveSystemBase tankDrive, Intake intake, Shooter shooter, Magazine magazine, ControlPanel controlPanel){
+  public OI(Pixy2 i2cPixy2, Pixy2 spiPixy2, DriveSystemBase tankDrive, Intake intake, Shooter shooter, Magazine magazine, ControlPanel controlPanel, Transition transition){
     _i2cPixy2 = i2cPixy2;
     _spiPixy2 = spiPixy2;
     _tankDrive = tankDrive;
@@ -55,12 +58,14 @@ public class OI {
     _shooter = shooter;
     _magazine = magazine;
     _controlPanel = controlPanel;
+    _transition = transition;
   }
   
   public void init() {
     Joystick driverControl = new Joystick(0);
     Joystick manipulatorControl = new Joystick(1);
     _driveTank = new DriveTank(_tankDrive, driverControl, manipulatorControl);
+    _transitionTeleop = new TransitionTeleop(_transition, manipulatorControl);
     //_runIntake = new RunIntake(_intake, driverControl);
    // _shooterAxis = new Joystick(driverControl, 3);
     JoystickButton intakeButton = new JoystickButton(driverControl, 5);
@@ -82,6 +87,7 @@ public class OI {
     cancelAllButton.whileHeld(new CancelAll(_controlPanel, _intake, _magazine, _shooter, _tankDrive));
 
     _tankDrive.setDefaultCommand(_driveTank);
+    _transition.setDefaultCommand(_transitionTeleop);
     
    if (_i2cPixy2 != null){
       System.out.println("Adding Dashboard Options...");

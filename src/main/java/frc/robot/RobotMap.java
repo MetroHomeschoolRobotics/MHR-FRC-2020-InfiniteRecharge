@@ -15,15 +15,16 @@ package frc.robot;
  */
 public class RobotMap {
   //These are all ports
-  public static int LeftFrontMotor = 1;
-  public static int LeftRearMotor = 2;
-  public static int RightFrontMotor = 3;
-  public static int RightRearMotor = 4;
-  public static int IntakeMotor = 0;
-  public static int ControlPanelMotor = 1;
-  public static int ShooterMotor1 = 5;
-  public static int ShooterMotor2 = 6;
-  public static int MagazineMotor = 0;
+  public static int LeftFrontMotor = 1;//SparkMAX
+  public static int LeftRearMotor = 2;//SparkMAX
+  public static int RightFrontMotor = 3;//SparkMAX
+  public static int RightRearMotor = 4;//SparkMAX
+  public static int IntakeMotor = 0;//Spark
+  public static int ControlPanelMotor = 1;//Spark
+  public static int ShooterMotor1 = 5;//SparkMAX
+  public static int ShooterMotor2 = 6;//SparkMAX
+  public static int MagazineMotor = 0;//CAN Talon
+  public static int TransitionMotor = 2;//Spark
 
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.

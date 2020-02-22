@@ -76,8 +76,9 @@ public class Robot extends TimedRobot {
     Shooter shooter = new Shooter(new CANSparkMax(RobotMap.ShooterMotor1, MotorType.kBrushless), new CANSparkMax(RobotMap.ShooterMotor2, MotorType.kBrushless));
     Magazine magazine = new Magazine(new TalonSRX(RobotMap.MagazineMotor));
     ControlPanel controlPanel = new ControlPanel(new Spark(RobotMap.ControlPanelMotor));
+    Transition transition = new Transition(new Spark(RobotMap.TransitionMotor));
    
-    m_oi = new OI(pixy2I2C, pixy2SPI, tankDrive, intake, shooter, magazine, controlPanel);
+    m_oi = new OI(pixy2I2C, pixy2SPI, tankDrive, intake, shooter, magazine, controlPanel, transition);
     m_oi.init();
   }
 
@@ -106,6 +107,7 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     CommandScheduler.getInstance().run();
     m_oi._driveTank.cancel();
+    m_oi._transitionTeleop.cancel();
    // m_oi._runIntake.cancel();
   }
 
@@ -167,6 +169,7 @@ public class Robot extends TimedRobot {
     }
     //instantiate drive command
     m_oi._driveTank.schedule();
+    m_oi._transitionTeleop.schedule();
   }
 
   /**
