@@ -18,7 +18,7 @@ public class RunControlPanel extends CommandBase {
   public RunControlPanel(ControlPanel controlPanel) {
     // Use addRequirements() here to declare subsystem dependencies.
     _controlPanel = controlPanel;
-    addRequirements(_controlPanel);
+    //addRequirements(_controlPanel);
   }
 
   // Called when the command is initially scheduled.
