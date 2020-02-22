@@ -72,10 +72,10 @@ public class DriveTank extends CommandBase {
       } else if (y >= 0) {
         y = (y*y);
       }
-      if (_driverControl.getRawButton(5)) {
+      if (_driverControl.getRawAxis(2) > 0.8) {
         x = x/2;
         y = y/2;
-      }else if (_driverControl.getRawButton(6)) {
+      }else if (_driverControl.getRawAxis(3) > 0.8) {
         x = 2*x;
         y = 2*y;
       }

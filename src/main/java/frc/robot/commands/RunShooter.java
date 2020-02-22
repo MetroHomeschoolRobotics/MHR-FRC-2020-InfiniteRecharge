@@ -7,18 +7,22 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 public class RunShooter extends CommandBase {
   private final Shooter _shooter;
+  private final Joystick _manipulatorControl;
   /**
    * Creates a new RunShooter.
    */
-  public RunShooter(Shooter shooter) {
+  public RunShooter(Shooter shooter, Joystick manipulatorControl) {
     // Use addRequirements() here to declare subsystem dependencies.
     _shooter = shooter;
+    _manipulatorControl = manipulatorControl;
     addRequirements(_shooter);
   }
 
@@ -26,6 +30,7 @@ public class RunShooter extends CommandBase {
   @Override
   public void initialize() {
     SmartDashboard.putBoolean("Shooting", true);
+    _manipulatorControl.setRumble(RumbleType.kLeftRumble, 1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,11 +44,16 @@ public class RunShooter extends CommandBase {
   public void end(boolean interrupted) {
     SmartDashboard.putBoolean("Shooting", false);
     _shooter.setShooter(0);
+    _manipulatorControl.setRumble(RumbleType.kLeftRumble, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(_manipulatorControl.getRawButton(5)){
+      return true;
+    } else {
     return false;
   }
+}
 }

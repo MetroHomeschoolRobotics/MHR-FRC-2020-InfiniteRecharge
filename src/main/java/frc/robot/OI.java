@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.pixy2.Pixy2;
@@ -62,24 +63,26 @@ public class OI {
     _driveTank = new DriveTank(_tankDrive, driverControl, manipulatorControl);
     //_runIntake = new RunIntake(_intake, driverControl);
    // _shooterAxis = new Joystick(driverControl, 3);
-    JoystickButton intakeButton = new JoystickButton(manipulatorControl, 5);
-    intakeButton.whileHeld(new RunIntake(_intake, manipulatorControl));
-    JoystickButton shootButton = new JoystickButton(manipulatorControl, 1);
-    shootButton.whileHeld(new RunShooter(_shooter)); //was toggleWhenPressed
-    JoystickButton magazineButton = new JoystickButton(manipulatorControl, 2);
-    magazineButton.whileHeld(new RunMagazine(_magazine));
-    JoystickButton reverseMagazineButton = new JoystickButton(manipulatorControl, 4);
-    reverseMagazineButton.whileHeld(new ReverseMagazine(_magazine));
-    JoystickButton reverseIntakeButton = new JoystickButton(manipulatorControl, 6);
-    reverseIntakeButton.whileHeld(new ReverseIntake(_intake, manipulatorControl));
-    JoystickButton controlPanelButton = new JoystickButton(driverControl, 8); // on the start button
-    controlPanelButton.toggleWhenPressed(new RunControlPanel(_controlPanel));
+    JoystickButton intakeButton = new JoystickButton(driverControl, 5);
+    intakeButton.whileHeld(new RunIntake(_intake, driverControl));
+    JoystickButton shootOnButton = new JoystickButton(manipulatorControl, 6);
+    shootOnButton.whenPressed(new RunShooter(_shooter, manipulatorControl));
+    JoystickButton reverseIntakeButton = new JoystickButton(driverControl, 6);
+    reverseIntakeButton.whileHeld(new ReverseIntake(_intake, driverControl));
+/*    JoystickButton controlPanelButton = new JoystickButton(driverControl, 8); // on the start button
+    controlPanelButton.toggleWhenPressed(new RunControlPanel(_controlPanel));*/
     JoystickButton targetButton = new JoystickButton(driverControl, 1);
     targetButton.whileHeld(new DriveLimelight(_tankDrive));//was toggleWhenPressed
-
+    POVButton magazineForwardButton = new POVButton(manipulatorControl, 90, 0);
+    magazineForwardButton.toggleWhenPressed(new RunMagazine(_magazine));
+    POVButton magazineReverseButton = new POVButton(manipulatorControl, 270, 0);
+    magazineReverseButton.toggleWhenPressed(new ReverseMagazine(_magazine));
+  
+    JoystickButton cancelAllButton = new JoystickButton(manipulatorControl, 7);
+    cancelAllButton.whileHeld(new CancelAll(_controlPanel, _intake, _magazine, _shooter, _tankDrive));
 
     _tankDrive.setDefaultCommand(_driveTank);
-
+    
    if (_i2cPixy2 != null){
       System.out.println("Adding Dashboard Options...");
       _i2cPixyChooser.setDefaultOption("Check Version", new SendCheckVersion(_i2cPixy2));

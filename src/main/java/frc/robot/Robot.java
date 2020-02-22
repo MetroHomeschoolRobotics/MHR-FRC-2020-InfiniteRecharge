@@ -167,7 +167,6 @@ public class Robot extends TimedRobot {
     }
     //instantiate drive command
     m_oi._driveTank.schedule();
-    //m_oi._runIntake.schedule();
   }
 
   /**
