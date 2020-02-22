@@ -28,7 +28,7 @@ public class Magazine extends SubsystemBase {
   }
 
   public void setMagazine(double speed){
-    _magazineMotor.set(ControlMode.PercentOutput, speed);
+    _magazineMotor.set(ControlMode.PercentOutput, 0-speed);
     SmartDashboard.putNumber("Magazine", speed);
   }
 }

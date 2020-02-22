@@ -19,15 +19,17 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class DriveLimelight extends CommandBase {
   //pull data from network tables (communication protocol)
 
-  double minDriveSpeed = 0;//Usually 0.1, minimum speed that makes robot move; adjustments smaller than this are ignored
+  double minDriveSpeed = 0.001;//Usually 0.1, minimum speed that makes robot move; adjustments smaller than this are ignored
   double KpAim = -0.1;//proportional control constant for aim
   double KpDistance = -0.1;//proportional control constant for distance
   double leftSpeed;//speed of left side of drive train
   double rightSpeed;//speed of right side of drive train
   DriveSystemBase _tankDrive;
   double threshold = 0.25;
-  int k = 40; //was 27, but could be slower to drop speed
+  int xDivide = 40; //was 47, but could be slower to drop speed
+  int yDivide = 40; //was 37
   double speedThreshold = 0.1;
+  double finishThreshold = 0.45;
   /**
    * Creates a new DriveLimelight.
    */
@@ -71,17 +73,17 @@ public class DriveLimelight extends CommandBase {
 
     if (tX < -threshold){
       //turn left
-      x = -Math.abs(tX/k);
+      x = -Math.abs(tX/xDivide);
     } else if (tX > threshold){
       //turn Right
-      x = Math.abs(tX/k);
+      x = Math.abs(tX/xDivide);
     }
     if (tY < -threshold){
       //drive forward
-      y = -Math.abs(tY/k);//was positive
+      y = -Math.abs(tY/yDivide);//was positive
     } else if (tY > threshold){
       //drive backward
-      y = Math.abs(tY/k);//was neagtive
+      y = Math.abs(tY/yDivide);//was neagtive
     }
     if (x > speedThreshold){
       x = speedThreshold;
@@ -105,7 +107,7 @@ public class DriveLimelight extends CommandBase {
     if (Math.abs(y) < minDriveSpeed){
       y = 0;
     }
-    
+
   
     //post data to smart dashboard periodically
     SmartDashboard.putNumber("Limelight X error", tX);
@@ -154,10 +156,17 @@ public class DriveLimelight extends CommandBase {
   public boolean isFinished() {
     NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     NetworkTableEntry tv = limelightTable.getEntry("tv");
-    // double t = tv.getDouble(0.0);
-    // if (t==0) {
-    //   return true;
-    // }
-    return false;
+
+    NetworkTableEntry tx = limelightTable.getEntry("tx");
+    NetworkTableEntry ty = limelightTable.getEntry("ty");
+    double tX = tx.getDouble(0.0); //x was a double
+    double tY = ty.getDouble(0.0); //y was a double
+    if (Math.abs(tY) < finishThreshold && Math.abs(tX) < finishThreshold) {
+      SmartDashboard.putBoolean("Lined Up", true);
+      return true;
+    } else {
+      SmartDashboard.putBoolean("Lined Up", false);
+      return false;
   }
+}
 }

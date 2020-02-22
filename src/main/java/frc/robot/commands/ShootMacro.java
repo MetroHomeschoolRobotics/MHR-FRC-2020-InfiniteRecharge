@@ -38,13 +38,13 @@ public class ShootMacro extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _shooter.setShooter(0.75);
+    _shooter.setShooter(0.8);// was 0.75
     Timer.delay(2);
     //Use has elapsed if it fails
     _transition.setTransitionMotor(0.6);
-    _magazine.setMagazine(-0.8);
-    _intake.setIntake(0.8);
-    Timer.delay(3.5);
+    _magazine.setMagazine(0.8);
+    _intake.setIntake(-0.8);
+    Timer.delay(2);//was 3.5
   }
 
   // Called once the command ends or is interrupted.
