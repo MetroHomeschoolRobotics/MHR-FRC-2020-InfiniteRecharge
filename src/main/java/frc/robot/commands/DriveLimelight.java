@@ -48,7 +48,6 @@ public class DriveLimelight extends CommandBase {
   @Override
   public void initialize() {
     SmartDashboard.putBoolean("Beginning DriveLimelight", true);
-    System.out.println("Beginning DriveLimelight");
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override

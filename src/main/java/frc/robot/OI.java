@@ -30,7 +30,7 @@ public class OI {
   private Intake _intake;
   private Shooter _shooter;
   private Magazine _magazine;
-//  private ControlPanel _controlPanel;
+  private ControlPanel _controlPanel;
   CommandBase _autonomousCommand;
   CommandBase _driveTank;
   CommandBase _runIntake;
@@ -53,7 +53,7 @@ public class OI {
     _intake = intake;
     _shooter = shooter;
     _magazine = magazine;
-    //_controlPanel = controlPanel;
+    _controlPanel = controlPanel;
   }
   
   public void init() {
@@ -72,8 +72,8 @@ public class OI {
     reverseMagazineButton.whileHeld(new ReverseMagazine(_magazine));
     JoystickButton reverseIntakeButton = new JoystickButton(manipulatorControl, 6);
     reverseIntakeButton.whileHeld(new ReverseIntake(_intake, manipulatorControl));
-/*    JoystickButton controlPanelButton = new JoystickButton(driverControl, 8); // on the start button
-    controlPanelButton.toggleWhenPressed(new RunControlPanel(_controlPanel));*/
+    JoystickButton controlPanelButton = new JoystickButton(driverControl, 8); // on the start button
+    controlPanelButton.toggleWhenPressed(new RunControlPanel(_controlPanel));
     JoystickButton targetButton = new JoystickButton(driverControl, 1);
     targetButton.whileHeld(new DriveLimelight(_tankDrive));//was toggleWhenPressed
 
