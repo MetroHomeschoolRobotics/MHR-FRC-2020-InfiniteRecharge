@@ -44,6 +44,7 @@ public class OI {
   CommandBase _driveLimelight;
   CommandBase _runTransition;
   CommandBase _transitionTeleop;
+  CommandBase _shootMacro;
   SendableChooser<CommandBase> _autoChooser = new SendableChooser<>();
 
   SendableChooser<CommandBase> _i2cPixyChooser = new SendableChooser<>();
@@ -78,14 +79,16 @@ public class OI {
     controlPanelButton.toggleWhenPressed(new RunControlPanel(_controlPanel));*/
     JoystickButton targetButton = new JoystickButton(driverControl, 1);
     targetButton.whileHeld(new DriveLimelight(_tankDrive));//was toggleWhenPressed
+    JoystickButton shootMacroButton = new JoystickButton(manipulatorControl, 1);
+    shootMacroButton.whenPressed(new ShootMacro(_intake, _magazine, _shooter, _transition));
+    JoystickButton cancelAllButton = new JoystickButton(manipulatorControl, 7);
+    cancelAllButton.whileHeld(new CancelAll(_controlPanel, _intake, _magazine, _shooter, _tankDrive));
+
     POVButton magazineForwardButton = new POVButton(manipulatorControl, 90, 0);
     magazineForwardButton.toggleWhenPressed(new RunMagazine(_magazine));
     POVButton magazineReverseButton = new POVButton(manipulatorControl, 270, 0);
     magazineReverseButton.toggleWhenPressed(new ReverseMagazine(_magazine));
   
-    JoystickButton cancelAllButton = new JoystickButton(manipulatorControl, 7);
-    cancelAllButton.whileHeld(new CancelAll(_controlPanel, _intake, _magazine, _shooter, _tankDrive));
-
     _tankDrive.setDefaultCommand(_driveTank);
     _transition.setDefaultCommand(_transitionTeleop);
     
