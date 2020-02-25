@@ -19,15 +19,15 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class DriveLimelight extends CommandBase {
   //pull data from network tables (communication protocol)
 
-  double minDriveSpeed = 0.001;//Usually 0.1, minimum speed that makes robot move; adjustments smaller than this are ignored
+  double minDriveSpeed = 0.2;//was 0.001; usually 0.1, minimum speed that makes robot move; adjustments smaller than this are ignored
   double KpAim = -0.1;//proportional control constant for aim
   double KpDistance = -0.1;//proportional control constant for distance
   double leftSpeed;//speed of left side of drive train
   double rightSpeed;//speed of right side of drive train
   DriveSystemBase _tankDrive;
   double threshold = 0.25;
-  int xDivide = 40; //was 47, but could be slower to drop speed
-  int yDivide = 40; //was 37
+  int xDivide = 27; //was 40, before that was 47, but could be slower to drop speed
+  int yDivide = 27; //was 40, before that was 37
   double speedThreshold = 0.1;
   double finishThreshold = 0.45;
   /**
@@ -59,7 +59,6 @@ public class DriveLimelight extends CommandBase {
     NetworkTableEntry ty = limelightTable.getEntry("ty");
     NetworkTableEntry ta = limelightTable.getEntry("ta");
       
-
     //update network tables data periodically
     //currently returns default values
     double tX = tx.getDouble(0.0); //x was a double
@@ -83,7 +82,7 @@ public class DriveLimelight extends CommandBase {
       y = -Math.abs(tY/yDivide);//was positive
     } else if (tY > threshold){
       //drive backward
-      y = Math.abs(tY/yDivide);//was neagtive
+      y = Math.abs(tY/yDivide);//was negative
     }
     if (x > speedThreshold){
       x = speedThreshold;
@@ -103,9 +102,13 @@ public class DriveLimelight extends CommandBase {
 
     if (Math.abs(x) < minDriveSpeed){
       x = 0;
+      minDriveSpeed -= 0.025;
+      xDivide += 5;
     }
     if (Math.abs(y) < minDriveSpeed){
       y = 0;
+      minDriveSpeed -= 0.025;
+      xDivide += 5;
     }
 
   

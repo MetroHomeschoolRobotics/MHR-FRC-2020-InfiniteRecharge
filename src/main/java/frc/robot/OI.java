@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.subsystems.*;
@@ -45,6 +46,7 @@ public class OI {
   CommandBase _runTransition;
   CommandBase _transitionTeleop;
   CommandBase _shootMacro;
+  CommandBase _autoDrive;
   SendableChooser<CommandBase> _autoChooser = new SendableChooser<>();
 
   SendableChooser<CommandBase> _i2cPixyChooser = new SendableChooser<>();
@@ -83,6 +85,9 @@ public class OI {
     shootMacroButton.whenPressed(new ShootMacro(_intake, _magazine, _shooter, _transition));
     JoystickButton cancelAllButton = new JoystickButton(manipulatorControl, 7);
     cancelAllButton.whileHeld(new CancelAll(_controlPanel, _intake, _magazine, _shooter, _tankDrive));
+    //syntax from wpilib to make one command run at the end of another: 
+    //JoystickButton targetShootButton = new JoystickButton(driverControl, 2);
+    //targetShootButton.whenPressed(new DriveLimelight(_tankDrive).whenFinished(() -> new ShootMacro(_intake, _magazine, _shooter, _transition)));
 
     POVButton magazineForwardButton = new POVButton(manipulatorControl, 90, 0);
     magazineForwardButton.toggleWhenPressed(new RunMagazine(_magazine));
@@ -123,7 +128,8 @@ public class OI {
 }
   
   public CommandBase getAutonomousCommand(){
-    return _autoChooser.getSelected();
+    //return _autoChooser.getSelected();
+    return new SequentialCommandGroup(new DriveLimelight(_tankDrive), new ShootMacro(_intake, _magazine, _shooter, _transition), new AutoDrive(_tankDrive));
   }
   
   public CommandBase getDriveCommand(){

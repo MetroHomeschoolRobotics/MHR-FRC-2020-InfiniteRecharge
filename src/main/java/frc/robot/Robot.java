@@ -122,11 +122,15 @@ public class Robot extends TimedRobot {
    * chooser code above (like the commented example) or additional comparisons
    * to the switch structure below with additional strings & commands.
    */
-  /*@Override
+  @Override
   public void autonomousInit() {
     //m_autonomousCommand = m_chooser.getSelected();
+    CommandScheduler.getInstance().run(); 
     m_autonomousCommand = m_oi.getAutonomousCommand();
     m_oi._driveTank.cancel();
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+    }
    // m_oi._runIntake.cancel();
   
     /*
@@ -147,15 +151,15 @@ public class Robot extends TimedRobot {
     /*if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-    
-  }*/
+    */
+  }
 
   /**
    * This function is called periodically during autonomous.
    */
   @Override
   public void autonomousPeriodic() {
-    CommandScheduler.getInstance().run();
+    CommandScheduler.getInstance().run();    
   }
 
   @Override
