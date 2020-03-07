@@ -27,8 +27,8 @@ public class DriveLimelight extends CommandBase {
   DriveSystemBase _tankDrive;
   double threshold = 0.25;
   int xDivide = 27; //was 40, before that was 47, but could be slower to drop speed
-  int yDivide = 27; //was 40, before that was 37
-  double speedThreshold = 0.1;
+  int yDivide = 20; //was 27; before that was 40, 37
+  double speedThreshold = 0.25;
   double finishThreshold = 0.45;
   /**
    * Creates a new DriveLimelight.
@@ -153,6 +153,7 @@ public class DriveLimelight extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     SmartDashboard.putBoolean("Beginning DriveLimelight", false);
+    _tankDrive.move(0, 0, 0);
   }
 
   // Returns true when the command should end.
@@ -165,7 +166,8 @@ public class DriveLimelight extends CommandBase {
     NetworkTableEntry ty = limelightTable.getEntry("ty");
     double tX = tx.getDouble(0.0); //x was a double
     double tY = ty.getDouble(0.0); //y was a double
-    if (Math.abs(tY) < finishThreshold && Math.abs(tX) < finishThreshold) {
+    double tV = tv.getDouble(0.0);
+    if (Math.abs(tY) < finishThreshold && Math.abs(tX) < finishThreshold && tV == 1) {
       SmartDashboard.putBoolean("Lined Up", true);
       return true;
     } else {

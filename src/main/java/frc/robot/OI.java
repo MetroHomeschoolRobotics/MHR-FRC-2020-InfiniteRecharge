@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.subsystems.*;
@@ -119,7 +120,7 @@ public class OI {
     _transition.setDefaultCommand(_transitionTeleop);
     
    if (_i2cPixy2 != null){
-      System.out.println("Adding Dashboard Options...");
+      //System.out.println("Adding Dashboard Options...");
       _i2cPixyChooser.setDefaultOption("Check Version", new SendCheckVersion(_i2cPixy2));
       _i2cPixyChooser.addOption("Get Biggest Block", new SendGetBiggestBlock(_i2cPixy2));
       _i2cPixyChooser.addOption("Find Color Blocks", new FindColorBlocks(_i2cPixy2));
@@ -145,24 +146,47 @@ public class OI {
       SmartDashboard.putData("Send SPI Command", new ExecuteChooser(_spiPixyChooser));
     }
 
+    _autoChooser.setDefaultOption("3-ball", new SequentialCommandGroup(
+      new WaitCommand(0),
+      new DriveLimelight(_tankDrive),
+      new ShootMacro(_intake, _magazine, _shooter, _transition),
+      new AutoDriveTime(_tankDrive, 0, 0.25, 0, 1.5),
+      new MoveIntake(_intakeLifter)));
+    _autoChooser.addOption("5-ball", new SequentialCommandGroup(
+        new MoveIntake(_intakeLifter),
+        new ParallelRaceGroup(
+          new WaitCommand(2.2),
+          new RunIntake(_intake, driverControl),
+          new RunMagazine(_magazine),
+          new AutoDriveTime(_tankDrive, 0, -0.4, 0, 2.2)),//time to be lengthened to match actual ball locations
+        //new AutoDriveTime(_tankDrive, 0, 0, 0, 0),
+        new ParallelRaceGroup(
+          new WaitCommand(1),//make wait shorter in final version
+          new RunIntake(_intake, driverControl),
+          new RunMagazine(_magazine)),  
+        new SeekTarget(_tankDrive),
+        //may add AutoDriveTime to reach initiation line at full speed, decreasing time required
+        new DriveLimelight(_tankDrive),
+        new ShootMacro(_intake, _magazine, _shooter, _transition)));
+    _autoChooser.addOption("No auto", new WaitCommand(15));
+
   SmartDashboard.putData("AutoMode", _autoChooser);
 }
   
   public CommandBase getAutonomousCommand(){
-    //return _autoChooser.getSelected();
-    Joystick driverControl = new Joystick(0);
-    return new SequentialCommandGroup(
-      new ParallelRaceGroup(
-        new AutoDriveTime(_tankDrive, 0, -0.25, 0, 2),//time to be lengthened to match actual ball locations
-        new RunIntake(_intake, driverControl),
-        new RunMagazine(_magazine)),
-        //new ParallelRaceGroup(
-        //new AutoDriveTime(_tankDrive, 0.15, 0, 0, 1.5),
-      new SeekTarget(_tankDrive),
-      //may add AutoDriveTime to reach initiation line at full speed, decreasing time required
-      new DriveLimelight(_tankDrive),
-      new ShootMacro(_intake, _magazine, _shooter, _transition));
-      //new AutoDriveTime(_tankDrive, 0, 0.25, 0, 1.5));
+    return _autoChooser.getSelected();
+    // Joystick driverControl = new Joystick(0);
+    // return new SequentialCommandGroup(
+    //   new MoveIntake(_intakeLifter),
+    //   new ParallelRaceGroup(
+    //     new AutoDriveTime(_tankDrive, 0, -0.25, 0, 2),//time to be lengthened to match actual ball locations
+    //     new RunIntake(_intake, driverControl),
+    //     new RunMagazine(_magazine)),
+    //   new SeekTarget(_tankDrive),
+    //   //may add AutoDriveTime to reach initiation line at full speed, decreasing time required
+    //   new DriveLimelight(_tankDrive),
+    //   new ShootMacro(_intake, _magazine, _shooter, _transition));
+    //   //new AutoDriveTime(_tankDrive, 0, 0.25, 0, 1.5));
   }
   
   public CommandBase getDriveCommand(){

@@ -33,7 +33,7 @@ public class MoveIntake extends CommandBase {
   public void execute() {
     if (state == 1){
       _intakeLifter.setIntakeLifterUp();
-    } else if (state == -1){
+    } else if (state == -1 || state == 0){
       _intakeLifter.setIntakeLifterDown();
     }
   }

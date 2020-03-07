@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.cameraserver.CameraServer;
 
 //import java.util.ResourceBundle.Control;
 
@@ -65,14 +66,14 @@ public class Robot extends TimedRobot {
       pixy2I2C = Pixy2.createInstance(new I2CLink());
       pixy2I2C.init();
     } catch (Exception e){
-      System.out.println(e.getMessage());
+      //System.out.println(e.getMessage());
       pixy2I2C = null;
     }
     try {
       pixy2SPI = Pixy2.createInstance(new SPILink());
       pixy2SPI.init();
     } catch (Exception e){
-      System.out.println(e.getMessage());
+      //System.out.println(e.getMessage());
       pixy2SPI = null;
     }    //CameraServer.getInstance().startAutomaticCapture();
     DriveSystemBase tankDrive = new TankDrive(
@@ -89,6 +90,7 @@ public class Robot extends TimedRobot {
     Climber climber = new Climber(new DoubleSolenoid(4, 5), new DoubleSolenoid(6, 7), new TalonSRX(RobotMap.ClimberMotor));
     ControlPanelLift controlPanelLift = new ControlPanelLift(new Spark(RobotMap.ControlPanelLiftMotor), new Encoder(RobotMap.ControlPanelLiftEncoderA, RobotMap.ControlPanelLiftEncoderB));
 
+    CameraServer.getInstance().startAutomaticCapture();
 
     m_oi = new OI(pixy2I2C, pixy2SPI, tankDrive, intake, shooter, magazine, controlPanel, transition, intakeLifter, climber, controlPanelLift);
     m_oi.init();

@@ -48,6 +48,7 @@ public class AutoDriveTime extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     SmartDashboard.putBoolean("AutoDriving", false);
+    _tankDrive.move(0, 0, 0);
   }
 
   // Returns true when the command should end.
