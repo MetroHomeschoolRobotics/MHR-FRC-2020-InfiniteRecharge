@@ -14,12 +14,12 @@ import edu.wpi.first.wpilibj.Spark;
 //import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class ControlPanel extends SubsystemBase {
-  public Spark _controlPanelMotor;
+  public Spark _controlPanelSpinMotor;
     /**
    * Creates a new Control Panel Controller.
    */
-  public ControlPanel(Spark controlPanelMotor) {
-    _controlPanelMotor = controlPanelMotor;
+  public ControlPanel(Spark controlPanelSpinMotor) {
+    _controlPanelSpinMotor = controlPanelSpinMotor;
   }
 
   @Override
@@ -28,6 +28,6 @@ public class ControlPanel extends SubsystemBase {
   }
 
   public void setControlPanel(double speed){
-    _controlPanelMotor.set(-speed);
+    _controlPanelSpinMotor.set(-speed);
   }
 }

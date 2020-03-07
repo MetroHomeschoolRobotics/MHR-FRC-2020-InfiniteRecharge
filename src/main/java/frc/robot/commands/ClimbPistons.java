@@ -7,43 +7,42 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSystemBase;
+import frc.robot.subsystems.Climber;
 
-public class AutoDrive extends CommandBase {
-  DriveSystemBase _tankDrive;
-  double x = 0;
-  double y = .25;
-  double z = 0;
-  double seconds = 1.5;
+public class ClimbPistons extends CommandBase {
+  private Climber _climber;
+  private int state;
+
   /**
-   * Creates a new AutoDrive.
+   * Creates a new ClimbPistons.
    */
-  public AutoDrive(DriveSystemBase tankDrive) {
-    _tankDrive = tankDrive;
+  public ClimbPistons(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(tankDrive);
+    _climber = climber;
+    //addRequirements(_climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putBoolean("AutoDriving", true);
+    state = _climber.getClimberState();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _tankDrive.move(x, y, z);
-    Timer.delay(seconds);
+    if (state == -1){
+      _climber.deploySolenoids();
+    } else if (state == 1){
+      _climber.reverseSolenoids();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putBoolean("AutoDriving", false);
   }
 
   // Returns true when the command should end.

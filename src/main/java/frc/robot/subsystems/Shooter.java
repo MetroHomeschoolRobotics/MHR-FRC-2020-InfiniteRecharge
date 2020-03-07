@@ -30,7 +30,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooter(double speed){
-    _shooterMotor1.set(-speed);
+    _shooterMotor1.set(speed);
     _shooterMotor2.set(speed);
     SmartDashboard.putNumber("Shooter Speed", speed);
   }

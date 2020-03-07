@@ -16,7 +16,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class DriveLimelight extends CommandBase {
+public class DriveLimelightTrench extends CommandBase {
   //pull data from network tables (communication protocol)
 
   double minDriveSpeed = 0.2;//was 0.001; usually 0.1, minimum speed that makes robot move; adjustments smaller than this are ignored
@@ -33,7 +33,7 @@ public class DriveLimelight extends CommandBase {
   /**
    * Creates a new DriveLimelight.
    */
-  public DriveLimelight(DriveSystemBase tankDrive) {
+  public DriveLimelightTrench(DriveSystemBase tankDrive) {
     _tankDrive = tankDrive;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(tankDrive);
@@ -55,7 +55,7 @@ public class DriveLimelight extends CommandBase {
   @Override
   public void execute() {
     NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-    limelightTable.getEntry("pipeline").setNumber(0);
+    limelightTable.getEntry("pipeline").setNumber(1);
     NetworkTableEntry tx = limelightTable.getEntry("tx");
     NetworkTableEntry ty = limelightTable.getEntry("ty");
     NetworkTableEntry ta = limelightTable.getEntry("ta");

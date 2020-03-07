@@ -12,8 +12,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.pixy2.Pixy2;
 import frc.robot.pixy2.links.*;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
+//import java.util.ResourceBundle.Control;
+
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 //import edu.wpi.first.wpilibj.CameraServer;
@@ -75,10 +83,14 @@ public class Robot extends TimedRobot {
     Intake intake = new Intake(new Spark(RobotMap.IntakeMotor));
     Shooter shooter = new Shooter(new CANSparkMax(RobotMap.ShooterMotor1, MotorType.kBrushless), new CANSparkMax(RobotMap.ShooterMotor2, MotorType.kBrushless));
     Magazine magazine = new Magazine(new TalonSRX(RobotMap.MagazineMotor));
-    ControlPanel controlPanel = new ControlPanel(new Spark(RobotMap.ControlPanelMotor));
+    ControlPanel controlPanel = new ControlPanel(new Spark(RobotMap.ControlPanelSpinMotor));
     Transition transition = new Transition(new Spark(RobotMap.TransitionMotor));
-   
-    m_oi = new OI(pixy2I2C, pixy2SPI, tankDrive, intake, shooter, magazine, controlPanel, transition);
+    IntakeLifter intakeLifter = new IntakeLifter(new DoubleSolenoid(0, 1), new DoubleSolenoid(2, 3));
+    Climber climber = new Climber(new DoubleSolenoid(4, 5), new DoubleSolenoid(6, 7), new TalonSRX(RobotMap.ClimberMotor));
+    ControlPanelLift controlPanelLift = new ControlPanelLift(new Spark(RobotMap.ControlPanelLiftMotor), new Encoder(RobotMap.ControlPanelLiftEncoderA, RobotMap.ControlPanelLiftEncoderB));
+
+
+    m_oi = new OI(pixy2I2C, pixy2SPI, tankDrive, intake, shooter, magazine, controlPanel, transition, intakeLifter, climber, controlPanelLift);
     m_oi.init();
   }
 
@@ -101,6 +113,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    limelightTable.getEntry("ledMode").setNumber(1);
+
   }
 
   @Override
@@ -108,6 +123,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     m_oi._driveTank.cancel();
     m_oi._transitionTeleop.cancel();
+    m_oi._climbWinch.cancel();
    // m_oi._runIntake.cancel();
   }
 
@@ -124,6 +140,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    limelightTable.getEntry("ledMode").setNumber(3);
     //m_autonomousCommand = m_chooser.getSelected();
     CommandScheduler.getInstance().run(); 
     m_autonomousCommand = m_oi.getAutonomousCommand();
@@ -168,12 +186,15 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    limelightTable.getEntry("ledMode").setNumber(3);
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
     //instantiate drive command
     m_oi._driveTank.schedule();
     m_oi._transitionTeleop.schedule();
+    m_oi._climbWinch.schedule();
   }
 
   /**

@@ -20,11 +20,18 @@ public class RobotMap {
   public static int RightFrontMotor = 3;//SparkMAX
   public static int RightRearMotor = 4;//SparkMAX
   public static int IntakeMotor = 0;//Spark
-  public static int ControlPanelMotor = 1;//Spark
+  public static int ControlPanelSpinMotor = 1;//Spark
   public static int ShooterMotor1 = 5;//SparkMAX
-  public static int ShooterMotor2 = 6;//SparkMAX
-  public static int MagazineMotor = 0;//CAN Talon
+  public static int ShooterMotor2 = 6; //SparkMAX
+  public static int MagazineMotor = 0;//CAN TalonSRX
   public static int TransitionMotor = 2;//Spark
+  public static int ClimberMotor = 1; //CAN TalonSRX
+  public static int ControlPanelLiftMotor = 3;//Spark
+  public static int ControlPanelLiftEncoderA = 0;
+  public static int ControlPanelLiftEncoderB = 1;
+  //public static int Compressor;//Pneumatic Compressor
+  //public static int IntakeSolenoid1 = 0;//Pneumatic Solenoid
+  //public static int IntakeSolenoid2 = 1;//Pneumatic solenoid
 
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.

@@ -7,11 +7,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 //import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -34,6 +36,9 @@ public class OI {
   private Magazine _magazine;
   private ControlPanel _controlPanel;
   private Transition _transition;
+  private IntakeLifter _intakeLifter;
+  private Climber _climber;
+  private ControlPanelLift _controlPanelLift;
   CommandBase _autonomousCommand;
   CommandBase _driveTank;
   CommandBase _runIntake;
@@ -47,13 +52,17 @@ public class OI {
   CommandBase _transitionTeleop;
   CommandBase _shootMacro;
   CommandBase _autoDrive;
+  CommandBase _moveIntake;
+  CommandBase _climbPistons;
+  CommandBase _climbWinch;
+  CommandBase _driveLimelightTrench;
+  CommandBase _seekTarget;
   SendableChooser<CommandBase> _autoChooser = new SendableChooser<>();
 
   SendableChooser<CommandBase> _i2cPixyChooser = new SendableChooser<>();
   SendableChooser<CommandBase> _spiPixyChooser = new SendableChooser<>();
 
-
-  public OI(Pixy2 i2cPixy2, Pixy2 spiPixy2, DriveSystemBase tankDrive, Intake intake, Shooter shooter, Magazine magazine, ControlPanel controlPanel, Transition transition){
+  public OI(Pixy2 i2cPixy2, Pixy2 spiPixy2, DriveSystemBase tankDrive, Intake intake, Shooter shooter, Magazine magazine, ControlPanel controlPanel, Transition transition, IntakeLifter intakeLifter, Climber climber, ControlPanelLift controlPanelLift){
     _i2cPixy2 = i2cPixy2;
     _spiPixy2 = spiPixy2;
     _tankDrive = tankDrive;
@@ -62,6 +71,9 @@ public class OI {
     _magazine = magazine;
     _controlPanel = controlPanel;
     _transition = transition;
+    _intakeLifter = intakeLifter;
+    _climber = climber;
+    _controlPanelLift = controlPanelLift;
   }
   
   public void init() {
@@ -69,6 +81,7 @@ public class OI {
     Joystick manipulatorControl = new Joystick(1);
     _driveTank = new DriveTank(_tankDrive, driverControl, manipulatorControl);
     _transitionTeleop = new TransitionTeleop(_transition, manipulatorControl);
+    _climbWinch = new ClimbWinch(_climber, driverControl);
     //_runIntake = new RunIntake(_intake, driverControl);
    // _shooterAxis = new Joystick(driverControl, 3);
     JoystickButton intakeButton = new JoystickButton(driverControl, 5);
@@ -81,6 +94,8 @@ public class OI {
     controlPanelButton.toggleWhenPressed(new RunControlPanel(_controlPanel));*/
     JoystickButton targetButton = new JoystickButton(driverControl, 1);
     targetButton.whileHeld(new DriveLimelight(_tankDrive));//was toggleWhenPressed
+    JoystickButton targetTrenchButton = new JoystickButton(driverControl, 2);
+    targetTrenchButton.whileHeld(new DriveLimelightTrench(_tankDrive));
     JoystickButton shootMacroButton = new JoystickButton(manipulatorControl, 1);
     shootMacroButton.whenPressed(new ShootMacro(_intake, _magazine, _shooter, _transition));
     JoystickButton cancelAllButton = new JoystickButton(manipulatorControl, 7);
@@ -88,11 +103,17 @@ public class OI {
     //syntax from wpilib to make one command run at the end of another: 
     //JoystickButton targetShootButton = new JoystickButton(driverControl, 2);
     //targetShootButton.whenPressed(new DriveLimelight(_tankDrive).whenFinished(() -> new ShootMacro(_intake, _magazine, _shooter, _transition)));
+    JoystickButton moveIntakeButton = new JoystickButton(driverControl, 4);
+    moveIntakeButton.whenPressed(new MoveIntake(_intakeLifter));
+    JoystickButton activateClimbPistonsButton = new JoystickButton(driverControl, 10);
+    activateClimbPistonsButton.whenPressed(new ClimbPistons(_climber));
 
     POVButton magazineForwardButton = new POVButton(manipulatorControl, 90, 0);
     magazineForwardButton.toggleWhenPressed(new RunMagazine(_magazine));
     POVButton magazineReverseButton = new POVButton(manipulatorControl, 270, 0);
     magazineReverseButton.toggleWhenPressed(new ReverseMagazine(_magazine));
+    POVButton liftControlPanelButton = new POVButton(manipulatorControl, 0, 0);
+    liftControlPanelButton.whileHeld(new LiftControlPanel(_controlPanelLift));
   
     _tankDrive.setDefaultCommand(_driveTank);
     _transition.setDefaultCommand(_transitionTeleop);
@@ -129,7 +150,19 @@ public class OI {
   
   public CommandBase getAutonomousCommand(){
     //return _autoChooser.getSelected();
-    return new SequentialCommandGroup(new DriveLimelight(_tankDrive), new ShootMacro(_intake, _magazine, _shooter, _transition), new AutoDrive(_tankDrive));
+    Joystick driverControl = new Joystick(0);
+    return new SequentialCommandGroup(
+      new ParallelRaceGroup(
+        new AutoDriveTime(_tankDrive, 0, -0.25, 0, 2),//time to be lengthened to match actual ball locations
+        new RunIntake(_intake, driverControl),
+        new RunMagazine(_magazine)),
+        //new ParallelRaceGroup(
+        //new AutoDriveTime(_tankDrive, 0.15, 0, 0, 1.5),
+      new SeekTarget(_tankDrive),
+      //may add AutoDriveTime to reach initiation line at full speed, decreasing time required
+      new DriveLimelight(_tankDrive),
+      new ShootMacro(_intake, _magazine, _shooter, _transition));
+      //new AutoDriveTime(_tankDrive, 0, 0.25, 0, 1.5));
   }
   
   public CommandBase getDriveCommand(){
