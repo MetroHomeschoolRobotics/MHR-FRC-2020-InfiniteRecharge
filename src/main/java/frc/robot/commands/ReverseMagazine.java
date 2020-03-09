@@ -29,7 +29,7 @@ public class ReverseMagazine extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _magazine.setMagazine(-0.6);
+    _magazine.setMagazine(-1);
   }
 
   // Called once the command ends or is interrupted.
