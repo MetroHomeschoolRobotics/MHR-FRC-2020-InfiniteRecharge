@@ -32,10 +32,10 @@ public class Shooter extends SubsystemBase {
   public void setShooter(double speed){
     //Shooter motors are both negated on Version 3
     //Shooter motors are mirrored on Version 2, motor 1 is negative, motor 2 is positive
-    //_shooterMotor1.set(-speed);
-    //_shooterMotor2.set(-speed);
     _shooterMotor1.set(-speed);
-    _shooterMotor2.set(speed);
+    _shooterMotor2.set(-speed);
+    //_shooterMotor1.set(-speed);
+    //_shooterMotor2.set(speed);
     SmartDashboard.putNumber("Shooter Speed", speed);
   }
 }
